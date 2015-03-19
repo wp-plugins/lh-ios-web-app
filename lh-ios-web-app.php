@@ -3,7 +3,7 @@
 Plugin Name: LH Ios Web App
 Plugin URI: http://lhero.org/plugins/lh-ios-web-app/
 Description: Makes your wp site ios web app capable
-Version: 0.10
+Version: 0.11
 Author: Peter Shaw
 Author URI: http://shawfactor.com/
 */

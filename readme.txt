@@ -4,7 +4,7 @@ Donate link: 	 http://lhero.org/plugins/lh-ios-web-app/
 Tags: iPhone, iPad, iOs, homescreen, home screen, icon, iPod touch, mobile, tablet, app, web app
 Requires at least: 3.0.1
 Tested up to: 4.1
-Stable tag: 0.10
+Stable tag: 0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,5 +33,9 @@ This plugin generates the meta tags to transform your WordPress website into a f
 
 = 0.10 - March 12, 2015 =
 * Initial release
+
+= 0.11 - March 17, 2015 =
+* Added Icons
+
 
 
