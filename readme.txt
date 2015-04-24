@@ -3,7 +3,7 @@ Contributors:      shawfactor
 Donate link: 	 http://lhero.org/plugins/lh-ios-web-app/
 Tags: iPhone, iPad, iOs, homescreen, home screen, icon, iPod touch, mobile, tablet, app, web app
 Requires at least: 3.0.1
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
