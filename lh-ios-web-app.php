@@ -3,10 +3,14 @@
 Plugin Name: LH Ios Web App
 Plugin URI: http://lhero.org/plugins/lh-ios-web-app/
 Description: Makes your wp site ios web app capable
-Version: 0.11
+Version: 1.0
 Author: Peter Shaw
 Author URI: http://shawfactor.com/
 */
+
+/* Exit if accessed directly */
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 
 define ( 'LH_IOS_WEB_APP_PLUGIN_URL', plugin_dir_url(__FILE__)); // with forward slash (/).
 
@@ -23,6 +27,7 @@ var $lh_iphone_app_show_webapp_prompt_field_name = 'js_helper-show_addtohome_pro
 var $lh_iphone_app_opt_name = 'lh_iphone_web_app-options';
 var $lh_iphone_app_apple_touch_icon_sizes;
 var $lh_iphone_app_apple_touch_startup_image_sizes;
+var $filename;
 
 
 
@@ -232,7 +237,7 @@ wp_enqueue_script('lh_iphone_app-maintain_state', plugins_url( '/scripts/app_sta
 // Prepare the media uploader
 function add_admin_scripts(){
 
-if (isset($_GET['page']) && $_GET['page'] == 'lh-ios_web-app-identifier') {
+if (isset($_GET['page']) && $_GET['page'] == $this->filename) {
 	// must be running 3.5+ to use color pickers and image upload
 	wp_enqueue_media();
         wp_register_script('lh-ios-app-admin', LH_IOS_WEB_APP_PLUGIN_URL.'scripts/uploader.js', array('jquery','media-upload','thickbox'));
@@ -243,7 +248,7 @@ if (isset($_GET['page']) && $_GET['page'] == 'lh-ios_web-app-identifier') {
 
 
 function plugin_menu() {
-add_options_page('LH Ios Web App Options', 'LH Ios Web App', 'manage_options', 'lh-ios_web-app-identifier', array($this,"plugin_options"));
+add_options_page('LH Ios Web App Options', 'LH Ios Web App', 'manage_options', $this->filename, array($this,"plugin_options"));
 }
 
 function plugin_options() {
@@ -371,23 +376,29 @@ echo "<h2>" . __( 'LH Ios Web App Settings', 'lh-ios-web-app' ) . "</h2>";
 
 }
 
+// add a settings link next to deactive / edit
+public function add_settings_link( $links, $file ) {
+
+	if( $file == $this->filename ){
+		$links[] = '<a href="'. admin_url( 'options-general.php?page=' ).$this->filename.'">Settings</a>';
+	}
+	return $links;
+}
+
+
 
 function __construct() {
 
 $this->lh_iphone_app_apple_touch_icon_sizes = $this->create_touch_icon_sizes();
-
 $this->lh_iphone_app_apple_touch_startup_image_sizes = $this->create_startup_image_sizes();
+$this->filename = plugin_basename( __FILE__ );
 
 add_action( 'init', array($this,"add_new_image_sizes_to_wp"));
-
 add_action('wp_head', array($this,"add_meta_to_head"));
-
 add_action( 'wp_enqueue_scripts', array($this,"enqueue_scripts"));
-
 add_action('admin_enqueue_scripts', array($this,"add_admin_scripts"));
-
 add_action('admin_menu', array($this,"plugin_menu"));
-
+add_filter('plugin_action_links', array($this,"add_settings_link"), 10, 2);
 
 }
 

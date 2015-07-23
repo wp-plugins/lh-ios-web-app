@@ -4,7 +4,7 @@ Donate link: 	 http://lhero.org/plugins/lh-ios-web-app/
 Tags: iPhone, iPad, iOs, homescreen, home screen, icon, iPod touch, mobile, tablet, app, web app
 Requires at least: 3.0.1
 Tested up to: 4.2
-Stable tag: 0.11
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,6 +20,15 @@ This plugin generates the meta tags to transform your WordPress website into a f
 * Upload a startup screen icon into the WordPress media library, this plugin will resize the image appropriately (for different device viewports).
 * This plugin has the option to use [Add to home screen's Cubiq script](http://cubiq.org/add-to-home-screen "Add to home screen") to place a floating balloon inviting the user to add a website to their home screen as a standard iOs application.
 * Customise the title of your application.
+
+Check out [our documentation][docs] for more information. 
+
+All tickets for the project are being tracked on [GitHub][].
+
+
+[docs]: http://lhero.org/plugins/lh-ios-web-app/
+[GitHub]: https://github.com/shawfactor/lh-ios-web-app
+
 
 == Installation ==
 1. Unpack the download-package
@@ -37,5 +46,7 @@ This plugin generates the meta tags to transform your WordPress website into a f
 = 0.11 - March 17, 2015 =
 * Added Icons
 
+= 1.0 - June 17, 2015 =
+* Various improvements
 
 
