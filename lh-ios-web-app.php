@@ -3,7 +3,7 @@
 Plugin Name: LH Ios Web App
 Plugin URI: http://lhero.org/plugins/lh-ios-web-app/
 Description: Makes your wp site ios web app capable
-Version: 1.0
+Version: 1.1
 Author: Peter Shaw
 Author URI: http://shawfactor.com/
 */
@@ -18,7 +18,8 @@ define ( 'LH_IOS_WEB_APP_PLUGIN_URL', plugin_dir_url(__FILE__)); // with forward
 class LH_ios_web_app_plugin {
 
 // variables for the field and option names 
-var $lh_iphone_app_apple_touch_icon_field_name = 'apple-touch-icon';
+var $site_icon_name = 'site_icon';
+var $site_icon;
 var $lh_iphone_app_web_app_capable_field_name = 'apple-mobile-web-app-capable';
 var $lh_iphone_app_title_field_name = 'apple-mobile-web-app-title';
 var $lh_iphone_app_apple_touch_startup_image = 'apple-touch-startup-image';
@@ -131,7 +132,7 @@ function add_new_image_sizes_to_wp() {
 
 foreach( $this->lh_iphone_app_apple_touch_icon_sizes as $size ){
 
-add_image_size( $this->lh_iphone_app_apple_touch_icon_field_name.'_'.$size['width'].'x'.$size['height'], $size['width'], $size['height'], true ); 
+add_image_size($this->site_icon_name.'_'.$size['width'].'x'.$size['height'], $size['width'], $size['height'], true ); 
 
 
 }
@@ -172,9 +173,9 @@ echo "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n";
 
 foreach( $this->lh_iphone_app_apple_touch_icon_sizes as $size ){
 
-if ($href = $this->check_image_size($options[$this->lh_iphone_app_apple_touch_icon_field_name], $this->lh_iphone_app_apple_touch_icon_field_name.'_'.$size['width'].'x'.$size['height'] )){
+if ($href = $this->check_image_size($this->site_icon, $this->site_icon_name.'_'.$size['width'].'x'.$size['height'] )){
 
-echo "<link rel=\"".$this->lh_iphone_app_apple_touch_icon_field_name."\" sizes=\"".$size['width']."x".$size['height']."\" href=\"".$href."\" />\n";
+echo "<link rel=\"apple-touch-icon-precomposed\" sizes=\"".$size['width']."x".$size['height']."\" href=\"".$href."\" />\n";
 
 
 }
@@ -207,14 +208,14 @@ $options = get_option($this->lh_iphone_app_opt_name);
 
 if ($options[$this->lh_iphone_app_show_webapp_prompt_field_name] == 1){
 
-wp_enqueue_script('lh_iphone_app-add_to_home_script', plugins_url( '/scripts/init_prompt.js' , __FILE__ ), array(), '0.01', true  );
+wp_enqueue_script('lh_iphone_app-add_to_home_script', plugins_url( '/scripts/init_prompt.js' , __FILE__ ), array(), '1.1', true  );
 
 }
 
 
 if ($options[$this->lh_iphone_app_web_app_capable_field_name] == 1){
 
-wp_enqueue_script('lh_iphone_app-web_app_capable', plugins_url( '/scripts/app_overrides.js' , __FILE__ ),array(), '0.01', true );
+wp_enqueue_script('lh_iphone_app-web_app_capable', plugins_url( '/scripts/app_overrides.js' , __FILE__ ),array(), '1.1', true );
 
 
 }
@@ -222,7 +223,7 @@ wp_enqueue_script('lh_iphone_app-web_app_capable', plugins_url( '/scripts/app_ov
 
 if ($options[$this->lh_iphone_app_maintain_state_field_name] == 1){
 
-wp_enqueue_script('lh_iphone_app-maintain_state', plugins_url( '/scripts/app_state.js' , __FILE__ ),array(), '0.01', true );
+wp_enqueue_script('lh_iphone_app-maintain_state', plugins_url( '/scripts/app_state.js' , __FILE__ ),array(), '1.1', true );
 
 
 }
@@ -271,9 +272,6 @@ if( isset($_POST[ $lh_iphone_app_hidden_field_name ]) && $_POST[ $lh_iphone_app_
 
 
 
-if ($_POST[ $this->lh_iphone_app_apple_touch_icon_field_name."-url" ] != ""){
-$lh_iphone_app_options[ $this->lh_iphone_app_apple_touch_icon_field_name ] = $_POST[ $this->lh_iphone_app_apple_touch_icon_field_name ];
-}
 
 $lh_iphone_app_options[ $this->lh_iphone_app_web_app_capable_field_name ] = $_POST[ $this->lh_iphone_app_web_app_capable_field_name ];
 $lh_iphone_app_options[ $this->lh_iphone_app_title_field_name ] = $_POST[ $this->lh_iphone_app_title_field_name];
@@ -306,7 +304,7 @@ $lh_iphone_app_options  = get_option($this->lh_iphone_app_opt_name);
 }
 
 
-echo "<h2>" . __( 'LH Ios Web App Settings', 'lh-ios-web-app' ) . "</h2>";
+echo "<h1>" . __( 'LH Ios Web App Settings', 'lh-ios-web-app' ) . "</h1>";
 
 ?>
 
@@ -315,11 +313,7 @@ echo "<h2>" . __( 'LH Ios Web App Settings', 'lh-ios-web-app' ) . "</h2>";
 <input type="hidden" name="<?php echo $lh_iphone_app_hidden_field_name; ?>" value="Y">
 
 
-<p><?php _e("Touch Icon url:", 'lh-ios-web-app'); ?> 
-<input type="hidden" name="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>"  id="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>" value="<?php echo $lh_iphone_app_options[$this->lh_iphone_app_apple_touch_icon_field_name]; ?>" size="10" />
-<input type="url" name="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>-url" id="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>-url" value="<?php echo wp_get_attachment_url($lh_iphone_app_options[$this->lh_iphone_app_apple_touch_icon_field_name]); ?>" size="50" />
-<input type="button" class="button" name="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>-upload_button" id="<?php echo $this->lh_iphone_app_apple_touch_icon_field_name; ?>-upload_button" value="Upload/Select Image" />
-</p>
+
 
 
 <p><?php _e("Web App Capable:", 'lh-ios-web-app'); ?>
@@ -385,6 +379,22 @@ public function add_settings_link( $links, $file ) {
 	return $links;
 }
 
+public function remove_apple_touch_site_icon_tag( $meta_tags ) {
+
+foreach( $meta_tags as $meta_tag ) {
+
+if (!strpos($meta_tag, "apple-touch-icon-precomposed")){
+
+$tag[] = $meta_tag;
+
+}
+
+}
+ 
+   return $tag;
+}
+
+
 
 
 function __construct() {
@@ -392,6 +402,7 @@ function __construct() {
 $this->lh_iphone_app_apple_touch_icon_sizes = $this->create_touch_icon_sizes();
 $this->lh_iphone_app_apple_touch_startup_image_sizes = $this->create_startup_image_sizes();
 $this->filename = plugin_basename( __FILE__ );
+$this->site_icon = get_option($this->site_icon_name);
 
 add_action( 'init', array($this,"add_new_image_sizes_to_wp"));
 add_action('wp_head', array($this,"add_meta_to_head"));
@@ -399,6 +410,9 @@ add_action( 'wp_enqueue_scripts', array($this,"enqueue_scripts"));
 add_action('admin_enqueue_scripts', array($this,"add_admin_scripts"));
 add_action('admin_menu', array($this,"plugin_menu"));
 add_filter('plugin_action_links', array($this,"add_settings_link"), 10, 2);
+add_filter( 'site_icon_meta_tags', array($this,"remove_apple_touch_site_icon_tag"), 10, 1);
+
+
 
 }
 
@@ -406,5 +420,10 @@ add_filter('plugin_action_links', array($this,"add_settings_link"), 10, 2);
 }
 
 $lh_ios_web_app = new LH_ios_web_app_plugin();
+
+
+
+
+
 
 ?>
